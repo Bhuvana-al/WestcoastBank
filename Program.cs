@@ -1,5 +1,7 @@
 ﻿using WestcoastBank;
 
+using System.Net;
+
 namespace ATM;
 
 class Program
@@ -8,7 +10,12 @@ class Program
     //static List<Transaction> transactions = [];
 
     //static Account account = new() {accountNumber = "1234-5678"};
-    static Account account = new("1234-5678)"){};
+    //static Account account = new("1234-5678", "Eva", "Nilsson") {};
+    static Account account_1 = new("1111-5678", "Eva", "Nilsson") {};
+    static SavingsAccount account_2 = new("1111-5678", "Eva", "Nilsson") {};
+    static List<Account> accounts = [];
+
+    //static SavingsAccount account = new("1111-5678") {};
 
     static void Main()
     {
@@ -16,7 +23,9 @@ class Program
          string accountNumber = "1111";
          string accountNo = account.accountNumber; //but this is possible */
 
-        account.FirstName = "Michael";
+        //account.FirstName = "Michael";
+        accounts.Add(account_1);
+        accounts.Add(account_2);
 
         // Här är vår enkla meny...
         Console.WriteLine("--------------------------------------------------");
@@ -24,6 +33,7 @@ class Program
         Console.WriteLine("För att ta ut tryck på tangenten 'w'");
         Console.WriteLine("För att se saldo tryck på tangenten 'b'");
         Console.WriteLine("För att se transaktionerna tryck på tangenten 't'");
+        Console.WriteLine("För att se kontouppgifter tryck på tangenten 'k'");
         Console.WriteLine("För att avsluta tryck på tangenten 'x'");
         Console.WriteLine("--------------------------------------------------");
 
@@ -50,6 +60,9 @@ class Program
                         break;
                     case "t":
                         DisplayTransactions();
+                        break;
+                    case "k":
+                        DisplayAccounts();
                         break;
                     case "d":
                         Console.WriteLine("Hur mycket vill du sätta in?");
@@ -103,31 +116,46 @@ class Program
 
     static void Deposit(int amount) // Header - Definition
     { // Body...
-        account.Deposit(amount);
+        account_1.Deposit(amount); //accounts reference
+        account_2.Deposit(amount); //savings account reference
         //AddTransaction(amount, "Insättning");
     }
 
     static void WithDraw(int amount)
     {
-        account.WithDraw(amount);
+        account_1.WithDraw(amount);
         //AddTransaction(amount, "Uttag");
         //throw new Exception($"Du har endast {account.balance} - räcker inte för att ta ut {amount}");
     }
     static void DisplayBalance()
     {
+        var b = account_1.Balance;
         //Console.WriteLine($"Ditt nuvarande saldo: {account.GetBalance()}");
-        Console.WriteLine($"Ditt nuvarande saldo: {account.Balance}");
+        Console.WriteLine($"Ditt nuvarande saldo: {account_1.Balance}");
     }
 
     static void DisplayTransactions()
     {
-        foreach (var tran in account.Transactions)
+        foreach (var tran in account_1.Transactions)
         {
             //Console.WriteLine(tran.GetTransactionInfo());
             Console.WriteLine(tran.ToString());
         }
+        foreach (var tran in account_2.Transactions)
+        {
+            Console.WriteLine(tran.ToString());
+        }
     }
 
+    static void DisplayAccounts()
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        foreach(var account in accounts)
+        {
+            Console.WriteLine(account.Balance);
+        }
+        Console.ResetColor();
+    }
     /* static void AddTransaction(int amount, string trxType)
     {
         var tran = new Transaction();
